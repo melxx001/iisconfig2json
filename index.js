@@ -84,8 +84,7 @@ function iisconfig2json (options) {
     var
         json = {},
         config = {},
-        output,
-        nodes
+        output
     ;
 
     if (!(this instanceof iisconfig2json)){
