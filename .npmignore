@@ -1,0 +1,5 @@
+node_modules
+app.js
+.idea
+sample
+npm-debug.log

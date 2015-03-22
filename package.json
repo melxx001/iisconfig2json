@@ -1,0 +1,36 @@
+{
+  "name": "iisconfig2json",
+  "version": "0.0.1",
+  "description": "Convert IIS configuration file to json format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/melxx001/iisconfig2json.git"
+  },
+  "keywords": [
+    "json",
+    "xml",
+    "iis",
+    "config",
+    "configuration",
+    "convert"
+  ],
+  "author": "Hicham El Hammouchi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/melxx001/iisconfig2json/issues"
+  },
+  "homepage": "https://github.com/melxx001/iisconfig2json",
+  "dependencies": {
+    "xml2js": "~0.4.1"
+  },
+  "maintainers": [
+    {
+      "name": "Hicham El Hammouchi",
+      "email": "hicham.elhammouchi@gmail.com"
+    }
+  ]
+}

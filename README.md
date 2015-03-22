@@ -1,2 +1,6 @@
 # iisconfig2json
-Convert iis configuration file to json format
+Convert an iis configuration file to a json format.
+
+# Coming soon: Documentation
+- Available options
+- Examples
