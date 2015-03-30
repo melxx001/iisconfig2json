@@ -1,5 +1,4 @@
 # iisconfig2json
----
 
 Convert an iis configuration file to json format. 
 
