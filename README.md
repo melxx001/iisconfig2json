@@ -29,7 +29,7 @@ console.log(JSON.stringify(json,null,4));
     - Defaults to **false**. The AppSettings node will be modified from an array to an object 
     - Setting this to **true** will convert the IIS config file to JSON without any manipulation to AppSettings
 
- ```javascript
+```javascript
 var config = require('iisconfig2json');
 var json = config({
         inputFile: './sample/global.config',
