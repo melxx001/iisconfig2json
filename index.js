@@ -11,7 +11,6 @@ var
 
 iisconfig2json.prototype.getJSON = function(options){
     var
-        _this = this,
         input = path.resolve(options.inputFile),
         json = {},
         data = ""
@@ -22,7 +21,6 @@ iisconfig2json.prototype.getJSON = function(options){
         if(err){
             throw new Error(err);
         }
-
         json = result;
     });
 
@@ -47,43 +45,9 @@ iisconfig2json.prototype.getAppSettings= function(data){
     return appSettings;
 }
 
-iisconfig2json.prototype.getConfigSections= function(data) {
-    if (data && data.configuration && data.configuration.configSections) {
-        return data.configuration.configSections;
-    }
-
-    return {};
-}
-
-iisconfig2json.prototype.getConnectionStrings= function(data) {
-    if (data && data.configuration && data.configuration.connectionStrings) {
-        return data.configuration.connectionStrings;
-    }
-
-    return {};
-}
-
-iisconfig2json.prototype.getLocation= function(data) {
-    if (data && data.configuration && data.configuration.location) {
-        return data.configuration.location;
-    }
-
-    return {};
-}
-
-iisconfig2json.prototype.getElements= function(data, element) {
-    if (data && data.configuration && data.configuration[element]) {
-        return data.configuration[element];
-    }
-
-    return {};
-}
-
-
 function iisconfig2json (options) {
     var
         json = {},
-        config = {},
         output
     ;
 
@@ -92,39 +56,30 @@ function iisconfig2json (options) {
     }
 
     if (!options){
-        options = {};
-        return;
-    }
-
-    json = this.getJSON(options);
-    if(options.fullJSON) {
         return json;
     }
 
+    json = this.getJSON(options);
+
+    if(Object.keys(json).length < 1 || options.defaultJSON){
+        return json;
+    }
+
+
     if (json && json.configuration) {
-        config["appSettings"] = this.getAppSettings(json);
-        config["configSections"] = this.getConfigSections(json);
-        config["connectionStrings"] = this.getConnectionStrings(json);
-        config["location"] = this.getLocation(json);
-        config["system.web.extensions"] = this.getElements(json, "system.web.extensions");
-        config["system.web"] = this.getElements(json, "system.web");
-        config["system.webServer"] = this.getElements(json, "system.webServer");
-    }else if(json && Object.keys(json).length !== 0){
-        config = json;
-    }else{
-        return;
+        json.configuration["appSettings"] = this.getAppSettings(json);
     }
 
     if(options.outputFile){
         output = path.resolve(options.outputFile);
-        fs.writeFile(output, JSON.stringify(config), function (err) {
+        fs.writeFile(output, JSON.stringify(json), function (err) {
             if (err){
                 throw new Error(err);
             }
         });
     }
 
-    return config;
+    return json;
 }
 
 exports = module.exports = iisconfig2json;
