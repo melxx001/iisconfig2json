@@ -5,27 +5,39 @@ var parser = new xml2js.Parser({
     explicitArray: false,
     mergeAttrs: true
 });
+var debug = require('debug')('iisconfig2json');
 
 
 iisconfig2json.prototype.getJSON = function(options) {
     var input = path.resolve(options.inputFile);
     var json = {};
     var data = '';
+    
+    debug('getJSON: Reading %s', input);
+    
+    try {
+        data = fs.readFileSync(input);
+        debug('getJSON: Got data %s', data);
+        parser.parseString(data, function(err, result) {
+            if (err) {
+                debug('getJSON: %s', err);
+                return {};
+            }
+            json = result;
+        });
 
-    data = fs.readFileSync(input);
-    parser.parseString(data, function(err, result) {
-        if (err) {
-            throw new Error(err);
-        }
-        json = result;
-    });
-
-    return json;
+        return json;
+    } catch (e) {
+        debug('getJSON: %s', e);
+        return {};
+    }
 };
 
 iisconfig2json.prototype.getAppSettings = function(data) {
     var appSettings = {};
     var arr = [];
+
+    debug('getAppSettings data: %s', data);
 
     if (data && data.configuration && data.configuration.appSettings && data.configuration.appSettings.add) {
         arr = data.configuration.appSettings.add;
@@ -51,12 +63,19 @@ function iisconfig2json (options) {
     }
 
     if (!options) {
+        debug('iisconfig2json: No options');
         return json;
     }
 
     json = this.getJSON(options);
 
+    if (!json) {
+        debug('iisconfig2json: No json');
+        return {};
+    }
+
     if (Object.keys(json).length < 1 || options.defaultJSON) {
+        debug('iisconfig2json: Object.keys(json).length < 1 || options.defaultJSON');
         return json;
     }
 
@@ -69,7 +88,7 @@ function iisconfig2json (options) {
         output = path.resolve(options.outputFile);
         fs.writeFile(output, JSON.stringify(json), function(err) {
             if (err) {
-                throw new Error(err);
+                debug('iisconfig2json: %s', err);
             }
         });
     }
