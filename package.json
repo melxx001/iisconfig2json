@@ -2,11 +2,12 @@
   "name": "iisconfig2json",
   "version": "0.0.2",
   "description": "Convert IIS configuration file to json format",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "build": "tsc",
+    "cover": "istanbul cover lib/index.test.js -x lib/index.test.js",
     "lint": "tslint .",
-    "cover": "istanbul cover index.test.ts -x index.test.ts",
-    "test": "tape index.test.ts | tap-spec"
+    "test": "tape ./lib/index.test.js | tap-spec"
   },
   "repository": {
     "type": "git",

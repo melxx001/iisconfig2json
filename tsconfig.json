@@ -1,5 +1,5 @@
 {
-  "compileOnSave": true,
+  "compileOnSave": false,
   "buildOnSave": false,
   "compilerOptions": {
     "module": "commonjs",
@@ -14,6 +14,9 @@
   "exclude": [
     "node_modules",
     "lib",
+    "testData",
+    "coverage",
+    ".idea",
     "typings/index",
     "typings/index.d.ts"
   ]
