@@ -4,9 +4,9 @@
   "description": "Convert IIS configuration file to json format",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint .",
-    "cover": "istanbul cover index.test.js -x index.test.js",
-    "test": "tape index.test.js | tap-spec"
+    "lint": "tslint .",
+    "cover": "istanbul cover index.test.ts -x index.test.ts",
+    "test": "tape index.test.ts | tap-spec"
   },
   "repository": {
     "type": "git",
@@ -38,9 +38,10 @@
   ],
   "devDependencies": {
     "coveralls": "^2.11.9",
-    "eslint": "^2.12.0",
     "istanbul": "^0.4.3",
     "tap-spec": "^4.1.1",
-    "tape": "^4.5.1"
+    "tape": "^4.5.1",
+    "tslint": "^3.11.0",
+    "typings": "^1.1.0"
   }
 }
