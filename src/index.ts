@@ -1,73 +1,48 @@
-var fs = require('fs');
-var path = require('path');
-var xml2js = require('xml2js');
-var parser = new xml2js.Parser({
+import * as fs from 'fs';
+import * as path from'path';
+import * as xml2js from 'xml2js';
+import {Parser} from 'xml2js';
+
+const parser: Parser = new xml2js.Parser({
     explicitArray: false,
     mergeAttrs: true
 });
-var debug = require('debug')('iisconfig2json');
+const debug : Function = require('debug')('iisconfig2json');
+
+interface Options extends Object {
+  inputFile?: string;
+  outputFile?: string;
+  defaultJSON?: boolean;
+}
+
+interface Configuration extends Object {
+  configuration?: AppSettings;
+}
+
+interface AppSettings extends Object {
+  appSettings?: Add;
+}
+
+interface Add extends Object {
+  add?: Element;
+}
 
 
-iisconfig2json.prototype.getJSON = function(options) {
-    var input = path.resolve(options.inputFile);
-    var json = {};
-    var data = '';
-    
-    debug('getJSON: Reading %s', input);
-    
-    try {
-        data = fs.readFileSync(input);
-        debug('getJSON: Got data %s', data);
-        parser.parseString(data, function(err, result) {
-            if (err) {
-                debug('getJSON: %s', err);
-                return {};
-            }
-            json = result;
-        });
+interface Element extends Object {
+  key?: number;
+  value?: string;
+}
 
-        return json;
-    } catch (e) {
-        debug('getJSON: %s', e);
-        return {};
-    }
-};
-
-iisconfig2json.prototype.getAppSettings = function(data) {
-    var appSettings = {};
-    var arr = [];
-
-    debug('getAppSettings data: %s', data);
-
-    if (data && data.configuration && data.configuration.appSettings && data.configuration.appSettings.add) {
-        arr = data.configuration.appSettings.add;
-    } else {
-        return appSettings;
-    }
-
-    arr.forEach(function(element, index, arr) {
-        if(element.key && element.value) {
-            appSettings[element.key] = element.value;
-        }
-    });
-
-    return appSettings;
-};
-
-function iisconfig2json (options) {
-    var json = {};
-    var output;
-
-    if (!(this instanceof iisconfig2json)) {
-        return new iisconfig2json(options);
-    }
-
-    if (!options) {
+const iisconfig2json = (options: Options = {}) : Configuration => {
+    let json: Configuration = {};
+    let output: string = '';
+  
+    if (!options.inputFile) {
         debug('iisconfig2json: No options');
         return json;
     }
 
-    json = this.getJSON(options);
+    json = getJSON(options);
 
     if (!json) {
         debug('iisconfig2json: No json');
@@ -81,7 +56,7 @@ function iisconfig2json (options) {
 
 
     if (json && json.configuration) {
-        json.configuration["appSettings"] = this.getAppSettings(json);
+        json.configuration.appSettings = getAppSettings(json);
     }
 
     if (options.outputFile) {
@@ -94,6 +69,52 @@ function iisconfig2json (options) {
     }
 
     return json;
-}
+};
 
-exports = module.exports = iisconfig2json;
+
+const getJSON = (options: Options) : Object => {
+  const input: string = path.resolve(options.inputFile || '');
+  let json: Object = {};
+
+  debug('getJSON: Reading %s', input);
+
+  try {
+    let data: Buffer = fs.readFileSync(input);
+    debug('getJSON: Got data %s', data);
+    parser.parseString(data.toString(), function(err: any, result: any) : void {
+      if (err) {
+        debug('getJSON: %s', err);
+      }
+      json = result;
+    });
+
+    return json;
+  } catch (e) {
+    debug('getJSON: %s', e);
+    return {};
+  }
+};
+
+const getAppSettings = (data: Configuration) : Element => {
+  let appSettings: Element = {};
+  let arr;
+
+  debug('getAppSettings data: %s', JSON.stringify(data));
+
+  if (data && data.configuration && data.configuration.appSettings && data.configuration.appSettings.add) {
+    arr = data.configuration.appSettings.add;
+    debug('getAppSettings arr: %s', JSON.stringify(data));
+  } else {
+    return appSettings;
+  }
+
+  arr.forEach(function(element: Element) {
+    if (element.key && element.value) {
+      appSettings[element.key] = element.value;
+    }
+  });
+
+  return appSettings;
+};
+
+export = iisconfig2json;

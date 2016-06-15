@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "tape": "registry:npm/tape#4.0.0+20160607230938"
+  },
+  "globalDependencies": {
+    "node": "registry:env/node#6.0.0+20160610031852",
+    "xml2js": "registry:dt/xml2js#0.0.0+20160317120654"
+  }
+}

@@ -4,10 +4,12 @@
   "description": "Convert IIS configuration file to json format",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
-    "cover": "istanbul cover lib/index.test.js -x lib/index.test.js",
+    "compile": "tsc",
+    "cover": "npm run compile && istanbul cover lib/index.test.js -x lib/index.test.js",
     "lint": "tslint .",
-    "test": "tape ./lib/index.test.js | tap-spec"
+    "postinstall": "typings install",
+    "test": "npm run compile && tape ./lib/index.test.js | tap-spec",
+    "test:tsc": "ts-node node_modules/tape/bin/tape ./src/**/*.test.ts | tap-spec"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,8 @@
     "iis",
     "config",
     "configuration",
-    "convert"
+    "convert",
+    "typescript"
   ],
   "author": "Hicham El Hammouchi",
   "license": "MIT",
@@ -42,7 +45,9 @@
     "istanbul": "^0.4.3",
     "tap-spec": "^4.1.1",
     "tape": "^4.5.1",
+    "ts-node": "^0.9.1",
     "tslint": "^3.11.0",
+    "typescript": "^1.8.10",
     "typings": "^1.1.0"
   }
 }
