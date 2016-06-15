@@ -2,6 +2,10 @@
 
 Convert an iis configuration file to json format. 
 
+## Status
+
+[![Build Status](https://travis-ci.org/melxx001/iisconfig2json.svg?branch=master)](https://travis-ci.org/melxx001/iisconfig2json) [![Coverage Status](https://coveralls.io/repos/github/melxx001/iisconfig2json/badge.svg?branch=master)](https://coveralls.io/github/melxx001/iisconfig2json?branch=master)
+
 ## Installation
 ```
 npm install iisconfig2json
