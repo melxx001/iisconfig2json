@@ -1,38 +1,35 @@
-var 
-	fs = require('fs'),
-	path = require('path'),
-	xml2js = require('xml2js'),
-	parser = new xml2js.Parser({
-        explicitArray: false,
-        mergeAttrs: true
-    })
-;
+var fs = require('fs');
+var path = require('path');
+var xml2js = require('xml2js');
+var parser = new xml2js.Parser({
+    explicitArray: false,
+    mergeAttrs: true
+});
 
 
-iisconfig2json.prototype.getJSON = function(options){
-    var
-        input = path.resolve(options.inputFile),
-        json = {},
-        data = ""
-    ;
+iisconfig2json.prototype.getJSON = function(options) {
+    var input = path.resolve(options.inputFile);
+    var json = {};
+    var data = '';
 
     data = fs.readFileSync(input);
-    parser.parseString(data , function (err, result) {
-        if(err){
+    parser.parseString(data, function(err, result) {
+        if (err) {
             throw new Error(err);
         }
         json = result;
     });
 
     return json;
-}
+};
 
-iisconfig2json.prototype.getAppSettings= function(data){
-    var appSettings = {}, arr = [];
+iisconfig2json.prototype.getAppSettings = function(data) {
+    var appSettings = {};
+    var arr = [];
 
-    if(data && data.configuration && data.configuration.appSettings && data.configuration.appSettings.add){
+    if (data && data.configuration && data.configuration.appSettings && data.configuration.appSettings.add) {
         arr = data.configuration.appSettings.add;
-    }else{
+    } else {
         return appSettings;
     }
 
@@ -43,25 +40,23 @@ iisconfig2json.prototype.getAppSettings= function(data){
     });
 
     return appSettings;
-}
+};
 
 function iisconfig2json (options) {
-    var
-        json = {},
-        output
-    ;
+    var json = {};
+    var output;
 
-    if (!(this instanceof iisconfig2json)){
+    if (!(this instanceof iisconfig2json)) {
         return new iisconfig2json(options);
     }
 
-    if (!options){
+    if (!options) {
         return json;
     }
 
     json = this.getJSON(options);
 
-    if(Object.keys(json).length < 1 || options.defaultJSON){
+    if (Object.keys(json).length < 1 || options.defaultJSON) {
         return json;
     }
 
@@ -70,10 +65,10 @@ function iisconfig2json (options) {
         json.configuration["appSettings"] = this.getAppSettings(json);
     }
 
-    if(options.outputFile){
+    if (options.outputFile) {
         output = path.resolve(options.outputFile);
-        fs.writeFile(output, JSON.stringify(json), function (err) {
-            if (err){
+        fs.writeFile(output, JSON.stringify(json), function(err) {
+            if (err) {
                 throw new Error(err);
             }
         });
