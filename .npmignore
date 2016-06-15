@@ -4,5 +4,5 @@ app.js
 .idea
 sample
 npm-debug.log
-./testData/output1-result.json
+testData/output1-result.json
 
