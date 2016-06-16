@@ -4,12 +4,12 @@
   "description": "Convert IIS configuration file to json format",
   "main": "lib/index.js",
   "scripts": {
-    "compile": "tsc",
-    "cover": "npm run compile && istanbul cover lib/index.test.js -x lib/index.test.js",
+    "typings": "typings install",
+    "compile": "npm run typings && tsc",
+    "cover": "npm run compile && istanbul cover lib/index.test.js -x lib/index.test.js | tap-spec",
     "lint": "tslint .",
-    "postinstall": "typings install",
     "test": "npm run compile && tape ./lib/index.test.js | tap-spec",
-    "test:tsc": "ts-node node_modules/tape/bin/tape ./src/**/*.test.ts | tap-spec"
+    "test:tsc": "npm run typings && ts-node node_modules/tape/bin/tape ./src/**/*.test.ts | tap-spec"
   },
   "repository": {
     "type": "git",
